@@ -32,7 +32,7 @@ namespace netchat.Controllers
                 Message = Messages[rng.Next(Messages.Length)]
             });
         }
-
+        
         public class ChatMessage
         {
             public  DateTime Date {get; set;}

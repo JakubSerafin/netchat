@@ -1,3 +1,4 @@
+import { ChatTextbox } from './ChatTextbox';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import 'isomorphic-fetch';
@@ -27,6 +28,7 @@ export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
         return <div>
             <h1>Osom Chat Widget</h1>
             { contents }
+            <ChatTextbox/>
         </div>;
     }
 
