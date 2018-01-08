@@ -9,14 +9,13 @@ namespace netchat.Controllers
     [Route("api/[controller]")]
     public class ChatController : Controller
     {
-        private static string[] Authors = new[]
-        {
-            "Roman", "Krzychu", "Franciszek Frederyk"
-        };
 
-        private static string[] Messages = new[]
+
+        private static List<ChatMessage> Messages = new List<ChatMessage>
         {
-            "Spadaj ciulu!", "Twoja matka to miła kobieta", "Jestem fanem Żanet Kalety"
+            new ChatMessage{Author="Roman", Message="Jestem fanem Żanet Kalety", Date=DateTime.Now},
+            new ChatMessage{Author="Krzychu", Message="Twoja matka to miła kobieta", Date=DateTime.Now},
+            new ChatMessage{Author="Roman", Message="Spadaj ciulu!", Date=DateTime.Now},
         };
 
 
@@ -24,13 +23,14 @@ namespace netchat.Controllers
         [HttpGet("[action]")]
         public IEnumerable<ChatMessage> GetMessages()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 3).Select(index => new ChatMessage
-            {
-                Date = DateTime.Now.AddMinutes(index),
-                Author = Authors[rng.Next(Authors.Length)],
-                Message = Messages[rng.Next(Messages.Length)]
-            });
+            return Messages;
+        }
+
+
+        [HttpPost("[action]")]
+        public void PostMessage(ChatMessage message)
+        {
+            Messages.Add(message);
         }
         
         public class ChatMessage

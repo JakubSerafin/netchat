@@ -12,12 +12,14 @@ export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
     constructor() {
         super();
         this.state = {loading: true, messages: [] };
-
-        fetch('api/Chat/GetMessages')
+        setInterval(()=> 
+            fetch('api/Chat/GetMessages')
             .then(response => response.json() as Promise<ChatMessage[]>)
             .then(data => {
                 this.setState({loading: false, messages: data });
-            });
+            })
+         ,2000);
+       
     }
 
     public render() {
