@@ -23,12 +23,12 @@ namespace netchat.Controllers
         [HttpGet("[action]")]
         public IEnumerable<ChatMessage> GetMessages()
         {
-            return Messages;
+            return Messages.Where(m=>m != null).ToList();
         }
 
 
         [HttpPost("[action]")]
-        public void PostMessage(ChatMessage message)
+        public void PostMessage([FromBody] ChatMessage message)
         {
             Messages.Add(message);
         }

@@ -33,9 +33,9 @@ export class ChatTextbox extends React.Component<{}, ChatTextState> {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                author:"Anonim",
-                message:this.state.message,
-                date: Date.now()
+                Author:"Anonim",
+                Message:this.state.message,
+                Date: new Date().toISOString()
             })
         })
     }
