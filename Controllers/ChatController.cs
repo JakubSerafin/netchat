@@ -3,9 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace netchat.Controllers
 {
+    public class ChatHub: Hub
+    {
+        List<ChatMessage> messages = new List<ChatMessage>();
+        public async Task Propagate(ChatMessage message)
+        {
+            await Clients.All.InvokeAsync("Propagate",message);
+        }
+
+        public async Task Message(ChatMessage message)
+        {
+            this.messages.Add(message);
+            await this.Propagate(message);
+        }        
+    }
+
     [Route("api/[controller]")]
     public class ChatController : Controller
     {
@@ -33,12 +49,14 @@ namespace netchat.Controllers
             Messages.Add(message);
         }
         
-        public class ChatMessage
-        {
-            public  DateTime Date {get; set;}
-            public String Author {get; set;}
+    }
 
-            public String Message {get; set;}
-        }
+    
+    public class ChatMessage
+    {
+        public  DateTime Date {get; set;}
+        public String Author {get; set;}
+
+        public String Message {get; set;}
     }
 }

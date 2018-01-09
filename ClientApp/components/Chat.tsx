@@ -2,24 +2,43 @@ import { ChatTextbox } from './ChatTextbox';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import 'isomorphic-fetch';
+import { HubConnection } from '@aspnet/signalr-client';
 
 interface ChatState {
     loading: boolean;
     messages: Array<ChatMessage>
+    hubConnection: HubConnection
 }
 
 export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
     constructor() {
         super();
-        this.state = {loading: true, messages: [] };
-        setInterval(()=> 
-            fetch('api/Chat/GetMessages')
-            .then(response => response.json() as Promise<ChatMessage[]>)
-            .then(data => {
-                this.setState({loading: false, messages: data });
-            })
-         ,2000);
+        let hubConnection =  new HubConnection("/sgr/chat")
+        
+        this.state = {loading: true, messages: [], hubConnection: hubConnection };
+
+        this.state.hubConnection
+              .start()
+              .then(() => console.log('Connection started!'))
+              .catch(err => console.log('Error while establishing connection :('));
+      
+            this.state.hubConnection.on('Propagate', (chatMessage) => {
+              console.log(chatMessage);
+            }
+        
+        // setInterval(()=> 
+        //     fetch('api/Chat/GetMessages')
+        //     .then(response => response.json() as Promise<ChatMessage[]>)
+        //     .then(data => {
+        //         this.setState({loading: false, messages: data });
+        //     })
+        //  ,2000);
        
+    }
+
+    public componentDidMount()
+    {
+
     }
 
     public render() {
