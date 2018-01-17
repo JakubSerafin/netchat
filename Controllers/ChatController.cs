@@ -19,13 +19,19 @@ namespace netchat.Controllers
         {
             this.messages.Add(message);
             await this.Propagate(message);
-        }        
+        }
+
+                
     }
 
     [Route("api/[controller]")]
     public class ChatController : Controller
     {
 
+        public ChatController(ChatHub hub)
+        {
+            this.Hub = hub;
+        }
 
         private static List<ChatMessage> Messages = new List<ChatMessage>
         {
@@ -33,8 +39,7 @@ namespace netchat.Controllers
             new ChatMessage{Author="Krzychu", Message="Twoja matka to miła kobieta", Date=DateTime.Now},
             new ChatMessage{Author="Roman", Message="Spadaj ciulu!", Date=DateTime.Now},
         };
-
-
+        private readonly ChatHub Hub;
 
         [HttpGet("[action]")]
         public IEnumerable<ChatMessage> GetMessages()
@@ -47,6 +52,7 @@ namespace netchat.Controllers
         public void PostMessage([FromBody] ChatMessage message)
         {
             Messages.Add(message);
+            Hub.Propagate(message);
         }
         
     }

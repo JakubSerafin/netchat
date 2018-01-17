@@ -24,15 +24,10 @@ export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
       
             this.state.hubConnection.on('Propagate', (chatMessage) => {
               console.log(chatMessage);
-            }
-        
-        // setInterval(()=> 
-        //     fetch('api/Chat/GetMessages')
-        //     .then(response => response.json() as Promise<ChatMessage[]>)
-        //     .then(data => {
-        //         this.setState({loading: false, messages: data });
-        //     })
-        //  ,2000);
+              var messages = this.state.messages;
+              messages.push(chatMessage)
+              this.setState({loading: false, messages: messages });
+            });
        
     }
 
@@ -49,16 +44,13 @@ export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
         return <div>
             <h1>Osom Chat Widget</h1>
             { contents }
-            <ChatTextbox/>
+            <ChatTextbox hub={this.state.hubConnection}/>
         </div>;
     }
 
     private static renderChatPanel(messages:ChatMessage[]) {
         return <div className="chatpanel">
         {messages.map((msg,index)=><div key={"msg_"+index}>{msg.author}: {msg.message}</div>)}
-            {/* {messages.forEach(msg => 
-                <div>msg</div>
-            )} */}
         </div>;
           
     }

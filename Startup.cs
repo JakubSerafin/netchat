@@ -23,8 +23,10 @@ namespace netchat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddSignalR();   
+            //services.AddMvc();
+            services.AddSignalR();
+            //var hub = new ChatHub();
+            //services.AddSingleton<ChatHub>(hub);   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,21 +48,20 @@ namespace netchat
             }
 
             app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("sgr/chat");
             });
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
+
+            //     routes.MapSpaFallbackRoute(
+            //         name: "spa-fallback",
+            //         defaults: new { controller = "Home", action = "Index" });
+            // });
         }
     }
 }
