@@ -19,7 +19,12 @@ export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
 
         this.state.hubConnection
               .start()
-              .then(() => console.log('Connection started!'))
+              .then(() => {
+                    console.log('Connection started!')
+                    this.state.hubConnection.invoke("GetMessages",4).then((val:ChatMessage[])=>{
+                        this.setState({loading: false, messages: val})
+                    });
+                })
               .catch(err => console.log('Error while establishing connection :('));
       
             this.state.hubConnection.on('Propagate', (chatMessage) => {
@@ -28,6 +33,8 @@ export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
               messages.push(chatMessage)
               this.setState({loading: false, messages: messages });
             });
+
+           
        
     }
 

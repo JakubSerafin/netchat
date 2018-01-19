@@ -9,7 +9,12 @@ namespace netchat.Controllers
 {
     public class ChatHub: Hub
     {
-        List<ChatMessage> messages = new List<ChatMessage>();
+        public ChatHub(FakeDal dal)
+        {
+            this.dal = dal;
+        }
+        private FakeDal dal;
+
         public async Task Propagate(ChatMessage message)
         {
             await Clients.All.InvokeAsync("Propagate",message);
@@ -17,8 +22,16 @@ namespace netchat.Controllers
 
         public async Task Message(ChatMessage message)
         {
-            this.messages.Add(message);
+            this.dal.Messages.Add(message);
             await this.Propagate(message);
+        }
+
+        public ChatMessage[] GetMessages(int number)
+        {
+            Console.WriteLine("Dostalem messedza");
+            var array = this.dal.Messages.TakeLast(number).ToArray();
+            Console.WriteLine("To moja odpowiedź " + array );
+            return array;
         }
 
                 
