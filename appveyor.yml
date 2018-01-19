@@ -13,6 +13,7 @@ install:
 # scripts to run before build
 before_build:
   # install node modules
+after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - npm install
   # run webpack with production flag
