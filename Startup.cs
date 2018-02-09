@@ -26,8 +26,8 @@ namespace netchat
         {
             services.AddMvc();
             services.AddSignalR();
-            //var hub = new ChatHub();
-            //services.AddSingleton<ChatHub>(hub);   
+            var dal = new FakeDal();
+            services.AddSingleton<FakeDal>(dal);   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
