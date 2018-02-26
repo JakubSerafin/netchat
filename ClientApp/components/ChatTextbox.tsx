@@ -1,5 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
+import { HubConnection } from "@aspnet/signalr-client";
 
 interface ChatTextState{
     message: string
@@ -7,12 +8,16 @@ interface ChatTextState{
     nickEntered: boolean;
 }
 
-export class ChatTextbox extends React.Component<{}, ChatTextState> {
-    constructor()
+interface ChatTextPropertis{
+    hub: HubConnection
+}
+
+export class ChatTextbox extends React.Component<ChatTextPropertis, ChatTextState> {
+    constructor(props:ChatTextPropertis)
     {
         super();
-        //this.props= props;
         this.state = {message:"", nick:"", nickEntered:false}
+        this.props= props;
         
     }
 
@@ -41,17 +46,8 @@ export class ChatTextbox extends React.Component<{}, ChatTextState> {
 
     public SendMessage()
     {
-        fetch('api/Chat/PostMessage', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Author:"Anonim",
-                Message:this.state.message,
-                Date: new Date().toISOString()
-            })
-        })
+        var message = {date: new Date(), message:this.state.message, author:this.state.nick}
+        this.props.hub.send("message", message);
+        this.setState({message:""});
     }
 }
