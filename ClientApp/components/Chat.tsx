@@ -2,7 +2,7 @@ import { ChatTextbox } from './ChatTextbox';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import 'isomorphic-fetch';
-import { HubConnection } from '@aspnet/signalr-client';
+import { HubConnection, TransportType } from '@aspnet/signalr-client';
 
 interface ChatState {
     loading: boolean;
@@ -13,7 +13,7 @@ interface ChatState {
 export class Chat extends React.Component<RouteComponentProps<{}>, ChatState> {
     constructor() {
         super();
-        let hubConnection =  new HubConnection("/sgr/chat")
+        let hubConnection =  new HubConnection("/sgr/chat",{ transport: TransportType.LongPolling })
         
         this.state = {loading: true, messages: [], hubConnection: hubConnection };
 
