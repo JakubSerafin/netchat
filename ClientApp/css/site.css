@@ -63,4 +63,8 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .user-name{
+        text-align: right;
+    }
 }
