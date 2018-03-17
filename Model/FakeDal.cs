@@ -1,14 +1,27 @@
 using System.Collections.Generic;
 using netchat.Controllers;
+using netchat.Model;
 
 public class FakeDal
 {
-    public List<ChatMessage> Messages {get; set;} = new List<ChatMessage>
+    private MongoConnector _mongo;
+
+    public FakeDal()
+    {
+        _mongo = new MongoConnector();
+        _mongo.init();
+    }
+
+    public ICollection<ChatMessage> Messages {
+        get
         {
-            new ChatMessage{Author="zbyszek", Message="test1"},
-            new ChatMessage{Author="zbyszek", Message="test2"},
-            new ChatMessage{Author="zbyszek", Message="test3"},
-            new ChatMessage{Author="zbyszek", Message="test4"},
-            new ChatMessage{Author="zbyszek", Message="test5"},
-        };
+            return _mongo.GetAllMessages();
+        }
+    }
+
+    public void SaveMessage(ChatMessage message)
+    {
+        _mongo.SaveMessage(message);
+    }
 }
+

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using netchat.Model;
 
 namespace netchat.Controllers
 {
@@ -22,7 +23,7 @@ namespace netchat.Controllers
 
         public async Task Message(ChatMessage message)
         {
-            this.dal.Messages.Add(message);
+            this.dal.SaveMessage(message);
             await this.Propagate(message);
         }
 
@@ -71,11 +72,5 @@ namespace netchat.Controllers
     }
 
     
-    public class ChatMessage
-    {
-        public  DateTime Date {get; set;}
-        public String Author {get; set;}
 
-        public String Message {get; set;}
-    }
 }
